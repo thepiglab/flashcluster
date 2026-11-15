@@ -1,0 +1,9 @@
+/target/
+/local/
+/third_party/
+*.npy
+*.npz
+*.json.gz
+/out/
+/prep/
+__pycache__/
