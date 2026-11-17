@@ -2,6 +2,7 @@
 //!   fit           cluster an .npy matrix (e-means or Lloyd), write centroids and labels
 //!   prep          write shared benchmark inputs (f16 data, queries, centroids, exact ground truth)
 //!   search-bench  CPU IVF: recall, latency, throughput, memory from a prep dir
+//!   gpu-fit       multi-seed GPU e-means, canonical seed, nested levels, stability (feature `cuda`)
 //!   gpu-bench     GPU exact search and e-means from a prep dir (feature `cuda`)
 use clap::{Parser, Subcommand};
 use flashcluster::bench;
@@ -23,6 +24,8 @@ enum Cmd {
     SearchBench(bench::SearchBenchArgs),
     #[cfg(feature = "cuda")]
     GpuBench(flashcluster::gpu::GpuBenchArgs),
+    #[cfg(feature = "cuda")]
+    GpuFit(flashcluster::gpufit::GpuFitArgs),
 }
 
 fn main() -> anyhow::Result<()> {
@@ -36,5 +39,7 @@ fn main() -> anyhow::Result<()> {
         Cmd::SearchBench(a) => bench::search_bench(a),
         #[cfg(feature = "cuda")]
         Cmd::GpuBench(a) => flashcluster::gpu::bench(a),
+        #[cfg(feature = "cuda")]
+        Cmd::GpuFit(a) => flashcluster::gpufit::gpu_fit(a),
     }
 }
